@@ -1,30 +1,47 @@
+import java.util.Arrays;
+
 // makes assumptions and no comparisions
 // Can't sort negative values
 // Limited to small sized arrays 
 
-public class counting_sort {
-    public static void main(String[] args) {
-        
-        int [] myArray = {12,7,91,67,23};
-        countSort(myArray,1,5);
-        for (int i = 0; i < myArray.length; i++) {
-            System.out.println(myArray[i]);
-        }
+class CountingSort {
+    void countSort(int array[], int size) {
+      int[] output = new int[size + 1];
+  
+      int max = array[0];
+      for (int i = 1; i < size; i++) {
+        if (array[i] > max)
+          max = array[i];
+      }
+      int[] count = new int[max + 1];
+  
+      for (int i = 0; i < max; ++i) {
+        count[i] = 0;
+      }
+  
+      for (int i = 0; i < size; i++) {
+        count[array[i]]++;
+      }
+  
+      for (int i = 1; i <= max; i++) {
+        count[i] += count[i - 1];
+      }
+  
+      for (int i = size - 1; i >= 0; i--) {
+        output[count[array[i]] - 1] = array[i];
+        count[array[i]]--;
+      }
+  
+      for (int i = 0; i < size; i++) {
+        array[i] = output[i];
+      }
     }
-
-    public static void countSort(int[] input, int min, int max) {
-        
-        int[] countArray = new int[(max-min)+1];
-            
-        for(int i=0;i<input.length;i++){
-            countArray[input[i]-min]++;
-        }
-        int j=0;
-        for (int i = min; i <= max; i++) {
-            while(countArray[i-min]>0){
-                input[j++]=i;
-                countArray[i - min]--;
-            }      
-        }
+  
+    public static void main(String args[]) {
+      int[] data = { 4, 2, 2, 8, 3, 3, 1 };
+      int size = data.length;
+      CountingSort cs = new CountingSort();
+      cs.countSort(data, size);
+      System.out.println(Arrays.toString(data));
     }
-}
+  }
